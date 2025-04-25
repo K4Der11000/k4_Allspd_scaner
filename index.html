@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerability Scanning Tool</title>
+    <style>
+        /* General page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* Password input page design */
+        .password-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            animation: backgroundAnimation 5s infinite alternate;
+            color: #fff;
+            text-align: center;
+        }
+
+        .password-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: boxAnimation 2s ease-out;
+            width: 300px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        input[type="password"] {
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid #ff6a00;
+            border-radius: 5px;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            border: none;
+            background-color: #ff6a00;
+            color: white;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ee0979;
+        }
+
+        #error-message {
+            color: red;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        /* Background animation effect */
+        @keyframes backgroundAnimation {
+            0% { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+            100% { background: linear-gradient(135deg, #ee0979, #ff6a00); }
+        }
+
+        /* Animation for password box */
+        @keyframes boxAnimation {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Content section after password is entered */
+        #content-container {
+            display: none; /* Hide content until password is checked */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Password input page -->
+<div id="password-container" class="password-container">
+    <div class="password-box">
+        <h1>Vulnerability Scanning Tool</h1>
+        <h3>Enter password to access</h3>
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="checkPassword()">Enter</button>
+        <p id="error-message"></p>
+    </div>
+</div>
+
+<!-- Content after password check -->
+<div id="content-container" class="container">
+    <div class="banner">
+        kder11000
+    </div>
+
+    <h1>Vulnerability Scanning Tool</h1>
+
+    <h3>Update Vulnerability Databases</h3>
+    <button class="button" onclick="updateVulnerabilityDatabases()">Update Databases Now</button>
+
+    <h3>Update Results</h3>
+    <pre id="output"></pre>
+
+    <!-- Post-exploitation section -->
+    <div class="exploitation-panel">
+        <h3>Execute Metasploit Exploitation with Reverse Connection</h3>
+
+        <input type="text" id="target_ip" class="input-field" placeholder="Enter Target IP here" />
+        <input type="text" id="reverse_ip" class="input-field" placeholder="Enter Reverse IP here" />
+        <input type="text" id="reverse_port" class="input-field" placeholder="Enter Reverse Port here" />
+
+        <button class="button" onclick="performMetasploitExploitation()">Execute Exploitation</button>
+
+        <h4>Exploitation Results:</h4>
+        <textarea id="exploitation_output" readonly></textarea>
+
+        <h4>Download Report:</h4>
+        <button class="button" onclick="downloadExploitationReport()">Download Exploitation Report</button>
+    </div>
+</div>
+
+<script>
+    // Check password function
+    function checkPassword() {
+        const correctPassword = "kader11000";
+        const enteredPassword = document.getElementById("password").value;
+        
+        if (enteredPassword === correctPassword) {
+            // If correct password, hide password input and show content
+            document.getElementById("password-container").style.display = "none";
+            document.getElementById("content-container").style.display = "block";
+            document.getElementById("error-message").innerText = ""; // Clear error message
+        } else {
+            // If incorrect password
+            document.getElementById("error-message").innerText = "Incorrect Password!";
+        }
+    }
+
+    // Update vulnerability databases function
+    function updateVulnerabilityDatabases() {
+        document.getElementById("output").innerText = "[*] Updating vulnerability databases...";
+
+        fetch('update_vulnerability_databases.cgi')
+            .then(res => res.text())
+            .then(data => document.getElementById("output").innerText = "[+] Update successful!")
+            .catch(err => document.getElementById("output").innerText = "[!] Error during update.");
+    }
+
+    // Perform Metasploit exploitation with reverse connection
+    function performMetasploitExploitation() {
+        let targetIp = document.getElementById("target_ip").value;
+        let reverseIp = document.getElementById("reverse_ip").value;
+        let reversePort = document.getElementById("reverse_port").value;
+
+        if (!targetIp || !reverseIp || !reversePort) {
+            alert("Please enter all fields (Target IP, Reverse IP, and Port).");
+            return;
+        }
+
+        document.getElementById("exploitation_output").value = "[*] Executing exploitation with Metasploit...";
+
+        // Send request to perform exploitation
+        fetch(`exploit_metasploit.cgi?target_ip=${targetIp}&reverse_ip=${reverseIp}&reverse_port=${reversePort}`)
+            .then(res => res.text())
+            .then(data => document.getElementById("exploitation_output").value = data)
+            .catch(err => document.getElementById("exploitation_output").value = "[!] Error during exploitation.");
+    }
+
+    // Download exploitation report
+    function downloadExploitationReport() {
+        window.location.href = "download_report.cgi";
+    }
+</script>
+
+</body>
+</html>
